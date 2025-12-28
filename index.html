@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arctic eSports</title>
+  <style>
+    /* ===== CSS ===== */
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #0b0f23;
+      color: #fff;
+      scroll-behavior: smooth;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background-color: #000;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    }
+
+    header .logo {
+      font-size: 28px;
+      font-weight: bold;
+      color: #ffd700;
+      letter-spacing: 1px;
+    }
+
+    header nav a {
+      color: #fff;
+      margin-left: 20px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    header nav a:hover {
+      color: #ffd700;
+    }
+
+    .hero-slider {
+      position: relative;
+      height: 450px;
+      overflow: hidden;
+      margin-bottom: 50px;
+    }
+
+    .hero-slider img {
+      width: 100%;
+      height: 450px;
+      object-fit: cover;
+      display: none;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .hero-slider img.active {
+      display: block;
+      opacity: 1;
+    }
+
+    section {
+      padding: 50px 20px;
+      text-align: center;
+    }
+
+    section h2 {
+      font-size: 36px;
+      margin-bottom: 30px;
+      color: #ffd700;
+      position: relative;
+    }
+
+    section h2::after {
+      content: '';
+      width: 80px;
+      height: 3px;
+      background: #ffd700;
+      display: block;
+      margin: 10px auto 0;
+    }
+
+    .team-container {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .team-container .member {
+      position: relative;
+      overflow: hidden;
+      border-radius: 10px;
+      transition: transform 0.3s;
+    }
+
+    .team-container .member:hover {
+      transform: scale(1.05);
+    }
+
+    .team-container .member img {
+      width: 200px;
+      height: 200px;
+      border-radius: 10px;
+      border: 3px solid #ffd700;
+      transition: 0.3s;
+    }
+
+    .team-container .member p {
+      margin-top: 10px;
+      font-weight: bold;
+      color: #ffd700;
+    }
+
+    #achievements ul {
+      list-style: none;
+      padding: 0;
+      max-width: 400px;
+      margin: auto;
+    }
+
+    #achievements li {
+      padding: 10px 0;
+      font-size: 20px;
+      transition: 0.3s;
+    }
+
+    #achievements li:hover {
+      color: #ffd700;
+      transform: scale(1.1);
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      max-width: 400px;
+      margin: auto;
+    }
+
+    form input, form select {
+      padding: 10px;
+      width: 100%;
+      border-radius: 5px;
+      border: none;
+    }
+
+    form button {
+      padding: 12px 25px;
+      background-color: #ffd700;
+      color: #000;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+      border-radius: 5px;
+    }
+
+    form button:hover {
+      background-color: #fff;
+      color: #000;
+    }
+
+    .social-icons a {
+      margin: 0 10px;
+      color: #ffd700;
+      font-size: 20px;
+      text-decoration: none;
+      display: inline-block;
+      margin-bottom: 10px;
+      transition: 0.3s;
+    }
+
+    .social-icons a:hover {
+      color: #fff;
+    }
+
+    .video iframe {
+      max-width: 100%;
+      margin-top: 20px;
+      border-radius: 10px;
+    }
+
+    .whatsapp-btn {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      background-color: #25D366;
+      color: #fff;
+      padding: 15px;
+      border-radius: 50%;
+      font-size: 25px;
+      z-index: 1000;
+      text-decoration: none;
+      transition: 0.3s;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    }
+
+    .whatsapp-btn:hover {
+      transform: scale(1.1);
+    }
+
+    /* Popup modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.8);
+    }
+
+    .modal-content {
+      background-color: #111;
+      margin: 10% auto;
+      padding: 30px;
+      border: 2px solid #ffd700;
+      width: 90%;
+      max-width: 400px;
+      border-radius: 10px;
+      text-align: center;
+      position: relative;
+      animation: pop 0.5s ease;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .close {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 25px;
+      font-weight: bold;
+      color: #ffd700;
+      cursor: pointer;
+    }
+
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">Arctic eSports</div>
+    <nav>
+      <a href="#team">Team</a>
+      <a href="#achievements">Achievements</a>
+      <a href="#join">Join</a>
+      <a href="#social">Social</a>
+    </nav>
+  </header>
+
+  <!-- Hero Section / Slider -->
+  <section class="hero-slider">
+    <div class="slides">
+      <img src="images/slider/slider1.jpg" class="slide active" alt="Slider 1">
+      <img src="images/slider/slider2.jpg" class="slide" alt="Slider 2">
+      <img src="images/slider/slider3.jpg" class="slide" alt="Slider 3">
+    </div>
+  </section>
+
+  <!-- Team Section -->
+  <section id="team">
+    <h2>Team Arctic</h2>
+    <div class="team-container">
+      <div class="member">
+        <img src="images/team/team-arctic.jpg" alt="Team Arctic">
+        <p>Team Arctic</p>
+      </div>
+      <div class="member">
+        <img src="images/team/igl-toxi.jpg" alt="IGL Toxi">
+        <p>IGL - Toxi</p>
+      </div>
+      <div class="member">
+        <img src="images/team/founder-umer.jpg" alt="Founder Umer">
+        <p>Founder - Umer Takildar</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Achievements Section -->
+  <section id="achievements">
+    <h2>Achievements</h2>
+    <ul>
+      <li>5k Champions ×2</li>
+      <li>50k Semi Finalists</li>
+      <li>18k Finalists</li>
+      <li>10k Grand Finalists</li>
+      <li>15k Finalists</li>
+      <li>3k Champion ×5</li>
+    </ul>
+  </section>
+
+  <!-- Join Form Section -->
+  <section id="join">
+    <h2>Join Arctic eSports</h2>
+    <form id="joinForm">
+      <input type="text" placeholder="IGN NAME" name="ign" required>
+      <input type="text" placeholder="ID NUMBER" name="id" required>
+      <input type="text" placeholder="CONTACT" name="contact" required>
+      <select name="role" required>
+        <option value="">Select Role</option>
+        <option value="IGL">IGL</option>
+        <option value="Entry Fragger">Entry Fragger</option>
+        <option value="Assaulter">Assaulter</option>
+        <option value="Supporter">Supporter</option>
+      </select>
+      <button type="submit">Submit</button>
+    </form>
+  </section>
+
+  <!-- Social Links -->
+  <section id="social">
+    <h2>Follow Us</h2>
+    <div class="social-icons">
+      <a href="https://instagram.com/arcticesports7" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+      <a href="https://youtube.com/@ARCTICESPORTS" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
+      <a href="#"><i class="fab fa-discord"></i> Discord: ARCTIC ESPORTS</a>
+      <a href="https://wa.me/917385009275" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+    </div>
+  </section>
+
+  <!-- Video Embed -->
+  <section class="video">
+    <h2>Watch Our Highlights</h2>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/1y0PE1BYWzY" title="YouTube video" frameborder="0" allowfullscreen></iframe>
+  </section>
+
+  <!-- WhatsApp Floating Button -->
+  <a href="https://wa.me/917385009275" class="whatsapp-btn" target="_blank">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <!-- Popup Modal -->
+  <div id="popupModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Thank you for joining Arctic eSports!</h2>
+      <p>We will contact you soon.</p>
+    </div>
+  </div>
+
+  <script>
+    // ===== JS =====
+    let slides = document.querySelectorAll('.hero-slider .slide');
+    let current = 0;
+
+    function showSlide(index) {
+      slides.forEach(slide => slide.classList.remove('active'));
+      slides[index].classList.add('active');
+    }
+
+    setInterval(() => {
+      current = (current + 1) % slides.length;
+      showSlide(current);
+    }, 4000); // 4 sec interval
+
+    // Modal popup for form
+    const form = document.getElementById('joinForm');
+    const modal = document.getElementById('popupModal');
+    const closeBtn = document.querySelector('.close');
+
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      modal.style.display = 'block';
+      form.reset();
+    });
+
+    closeBtn.addEventListener('click', function(){
+      modal.style.display = 'none';
+    });
+
+    window.addEventListener('click', function(e){
+      if(e.target == modal) modal.style.display = 'none';
+    });
+  </script>
+
+</body>
+</html>
